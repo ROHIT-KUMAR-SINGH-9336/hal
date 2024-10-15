@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Explanation of JavaScript Logic:
+    showCropDetails(): Fetches details about the selected crop and displays them.
+    startMonitoring(): Simulates the start of a crop monitoring process.
+    getFertilizerPlan(): Displays a message indicating that a fertilizer plan will be generated.
+    calculateCost(): Provides a simple estimation of costs for seeds, fertilizers, irrigation, and harvesting -->
+  <head>
+    <meta charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
+    <title>CropWise - Crop Monitoring Website</title>
+
+   
+
+
+
+
+    <style>
+      /* CSS Styles */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #e8e2e2;
+        margin: 0;
+        padding: 0;
+      }
+
+      .navbar {
+        background-color: #4caf50;
+        overflow: hidden;
+        padding: 1rem;
+        text-align: center;
+      }
+
+      .navbar a {
+        color: rgb(255, 255, 255);
+        padding: 14px 20px;
+        text-decoration: none;
+        font-size: 18px;
+      }
+
+      .navbar a:hover {
+        background-color: #45a049;
+      }
+
+      .banner {
+        background: url("https://images.unsplash.com/photo-1505247964246-1f03f3d1b1b8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MXwzNjUyOXwwfDF8c2VhcmNofDF8fGZhcm18ZW58MHx8fHw%3D&ixlib=rb-1.2.1&q=80&w=1080")
+          no-repeat center center/cover;
+        height: 400px;
+        color: rgb(99, 44, 44);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+       
+      }
+
+      .banner h1 {
+        font-size: 3rem;
+        margin: 0;
+      }
+
+      .container {
+        padding: 2rem;
+      }
+
+      .section {
+        margin-bottom: 2rem;
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .section h2 {
+        color: #4caf50;
+      }
+
+      .footer {
+        background-color: #333;
+        color: white;
+        text-align: center;
+        padding: 1rem;
+        margin-top: 2rem;
+      }
+
+      button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+
+      input,
+      select,
+      textarea {
+        padding: 10px;
+        margin: 10px 0;
+        width: 100%;
+        box-sizing: border-box;
+      }
+    </style>
+     <!-- below this there is code for style of image input  -->
+     <style>
+        *{
+            margin: 0;
+            padding: 1px;
+           
+            font-family: 'poppins', sans-serif;
+            box-sizing: border-box;
+        }
+        .hero{ 
+            width: 100%;
+            height: 100;
+            background: #e0cd97;
+            padding-left: 35px;
+            display:flex;
+            
+           
+        }
+        
+        .card{
+            cursor: pointer;
+            background: #e0cd97;
+            padding: 5px;
+            border-radius: 25px;
+            text-align:center;
+            color: #333;
+        }
+        .card h1{
+            
+            font-weight: 500;
+            color: #171414;
+        }
+
+        
+        .card img{
+            cursor: pointer;
+            width: 130px;
+            height: 100px;
+            border: 50%;
+            margin-top: 10px;
+            margin-bottom: 10px;    
+        }
+        label{ 
+            align-items: center;
+            display: block;
+            width: 200px;
+            background: #e3362c;
+            color: #ffff;
+            justify-content: center;
+            border-radius: 5px;
+            cursor: pointer;
+        
+        }
+        input{
+            
+            display: none;
+        }
+        </style>
+  </head>
+
+  <body>
+    <!-- Navbar -->
+    <div class="navbar">
+      <a href="#home">Home</a>
+      <a href="#crop-guidance">Crop Guidance</a>
+      <a href="#monitoring">Crop Monitoring</a>
+      <a href="#fertilizer">Fertilizer & Water Management</a>
+      <a href="#cost-estimation">Cost Estimator</a>
+      <a href="#contact">Contact</a>
+    </div>
+
+    <!-- Banner -->
+    <div class="banner" id="home">
+      <h1 style="color: green" >Welcome to CropWise</h1>
+
+      <p>Your Crop Monitoring and Management Partner</p>
+    </div>
+
+
+
+<!-- below thia there is code for upload of image  -->
+    <div class="hero">
+        <img src="/download.png" id="profile-pic">
+        <div class="card">
+        <h2 >Diagnose desease of your crop</h2>
+            <p>Upload photo of your crop</p>
+            
+            <label for="input-file" width="400px">upload image</label>
+            <input type="file" accept="image/jpeg, image/png, image/jpg " id="input-file" height="400px">  
+ 
+        </div >
+    </div>
+
+    <script>
+        let profilepic = document.getElementById("profile-pic");
+        let inputFile = document.getElementById("input-file");
+    
+        inputFile.onchange = function(){
+            profilepic.src = URL.createObjectURL(inputFile.files[0]);
+        }
+    </script>
+
+
+
+
+
+
+
+
+    <!-- Main Container -->
+    <div class="container">
+      <!-- Crop Guidance Section -->
+      <div class="section" id="crop-guidance">
+        <h2>Crop Guidance</h2>
+        <p>
+          Select a crop to learn about the best seeds, ideal weather conditions,
+          suited soil, and water requirements.
+        </p>
+        <form>
+          <label for="crop-select">Choose a crop:</label>
+          <select id="crop-select">
+            <option value="wheat">Wheat</option>
+            <option value="corn">Corn</option>
+            <option value="rice">Rice</option>
+            <option value="patato">patato</option>
+            <option value="tomato">tomato</option>
+            <option value="beans">beans</option>
+            <option value="Black gram">Black gram</option>
+            <option value="soybean">Soybean</option>
+            <option value="chickpea">chickpea</option>
+            <option value="barley">barley</option>
+            <option value="mustard">mustard</option>
+          </select>
+          <button type="button" onclick="showCropDetails()">
+            Get Guidance
+          </button>
+        </form>
+        <div id="crop-details" style="margin-top: 1rem"></div>
+      </div>
+
+      <!-- <crop suggestion -->
+
+      <!-- Crop Monitoring Section -->
+      <div class="section" id="monitoring">
+        <h2>Crop Monitoring</h2>
+        <p>
+          Real-time monitoring of crop health using satellite imagery and growth
+          tracking.
+        </p>
+        <button type="button" onclick="startMonitoring()">
+          Start Monitoring
+        </button>
+        <div id="monitoring-status" style="margin-top: 1rem"></div>
+      </div>
+
+      <!-- Fertilizer & Water Management Section -->
+      <div class="section" id="fertilizer">
+        <h2>Fertilizer & Water Management</h2>
+        <p>
+          Get a detailed plan for efficient fertilizer usage and water
+          management based on your crop and soil.
+        </p>
+        <button type="button" onclick="getFertilizerPlan()">Get Plan</button>
+        <div id="fertilizer-plan" style="margin-top: 1rem"></div>
+      </div>
+
+      <!-- Cost Estimation Section -->
+      <div class="section" id="cost-estimation">
+        <h2>Cost Estimator</h2>
+        <p>
+          Calculate the cost of seeds, fertilizer, irrigation, and harvesting
+          for your crop.
+        </p>
+        <button type="button" onclick="calculateCost()">Estimate Cost</button>
+        <div id="cost-estimate" style="margin-top: 1rem"></div>
+      </div>
+
+      <!-- Contact Section -->
+      <div class="section" id="contact">
+        <h2>Contact Us</h2>
+        <form onsubmit="sendMessage(event)">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required /><br /><br />
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required /><br /><br />
+          <label for="message">Message:</label><br />
+          <textarea
+            id="message"
+            name="message"
+            rows="4"
+            cols="50"
+            required
+          ></textarea
+          ><br /><br />
+          <input type="submit" value="Send Message" />
+        </form>
+        <div id="contact-response" style="margin-top: 1rem"></div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>&copy; 2024 CropWise. All Rights Reserved.</p>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+      function showCropDetails() {
+        let crop = document.getElementById("crop-select").value;
+        let cropDetails = document.getElementById("crop-details");
+
+        let details = {
+          wheat:
+            "Wheat requires loamy soil and grows best in temperate climates with moderate rainfall.",
+          corn: "Corn needs fertile, well-drained soil and warm temperatures. Ideal for regions with long sunny periods.",
+          rice: "Rice thrives in clay soil with good water retention. Requires hot, humid climate and heavy water irrigation.",
+          soybean:
+            "Soybean prefers sandy loam soil with good drainage. Grows well in warm temperatures with moderate rain.",
+        };
+
+        cropDetails.innerHTML = `<p><strong>${
+          crop.charAt(0).toUpperCase() + crop.slice(1)
+        }:</strong> ${details[crop]}</p>`;
+      }
+
+      function startMonitoring() {
+        let monitoringStatus = document.getElementById("monitoring-status");
+        monitoringStatus.innerHTML =
+          "<p>Crop monitoring has started. Gathering real-time satellite imagery...</p>";
+      }
+
+      function getFertilizerPlan() {
+        let fertilizerPlan = document.getElementById("fertilizer-plan");
+        fertilizerPlan.innerHTML =
+          "<p>Your customized fertilizer and water management plan will be generated based on soil and crop type...</p>";
+      }
+
+      function calculateCost() {
+        let costEstimate = document.getElementById("cost-estimate");
+        costEstimate.innerHTML =
+          "<p>Cost estimation: Seeds - $100, Fertilizers - $150, Irrigation - $80, Harvesting - $200. Total: $530.</p>";
+      }
+
+      function sendMessage(event) {
+        event.preventDefault();
+        let name = document.getElementById("name").value;
+        let email = document.getElementById("email").value;
+        let message = document.getElementById("message").value;
+
+        let contactResponse = document.getElementById("contact-response");
+        contactResponse.innerHTML = <p>Thank you, ${name}. We have received your message and will get back to you at ${email} soon.</p>;
+      }
+    </script>
+  </body>
+</html>
